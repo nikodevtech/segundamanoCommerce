@@ -33,7 +33,7 @@ public class ZonaPublicaControlador {
      * la lista de productos no vendidos al modelo y tenerlos disponibles siempre en la vista.
      * @return Lista de productos no vendidos.
      */
-    @ModelAttribute("productos")
+    @ModelAttribute("productos") 
     public List<Producto> productosNoVendidos() {		
         return productoServicio.productosSinVender();
     }

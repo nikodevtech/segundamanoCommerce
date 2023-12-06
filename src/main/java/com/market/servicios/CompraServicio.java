@@ -49,5 +49,9 @@ public class CompraServicio {
 	public List<Compra> porPropietario(Usuario u) {
 		return repositorio.findByPropietarioDeLaCompra(u);
 	}
+	
+	public List<Compra> porEmailPropietario(String email) {
+		return repositorio.findByPropietarioDeLaCompra_email(email);
+	}
 
 }
