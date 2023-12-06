@@ -71,7 +71,7 @@ public class SeguridadConfig {
             // Configura las reglas de autorización para las solicitudes HTTP.
             .authorizeHttpRequests(auth -> 
                 auth
-                	// Permite el acceso público a ciertos recursos de URL.
+                	// Permite el acceso público a ciertos recursos y direcciones de URL que no requieren autenticación.
                     .requestMatchers("/", "/webjars/**", "/css/**", "/public/**", "/auth/**", "/files/**").permitAll()
                     .anyRequest().authenticated()// Exige autenticación para cualquier otra solicitud.
             )

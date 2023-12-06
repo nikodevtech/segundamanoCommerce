@@ -31,7 +31,7 @@ public class CompraServicio {
 		return repositorio.save(c);
 	}
 	
-	// Agrega un producto a una Compra, o lo que es lo mismo,
+	// Establece un producto a una Compra, o lo que es lo mismo,
 	// dada una compra añade nuevos productos a ella
 	public Producto addProductoCompra(Producto p, Compra c) {
 		p.setCompra(c);
@@ -47,7 +47,7 @@ public class CompraServicio {
 	}
 	
 	public List<Compra> porPropietario(Usuario u) {
-		return repositorio.findByPropietario(u);
+		return repositorio.findByPropietarioDeLaCompra(u);
 	}
 
 }

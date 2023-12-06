@@ -20,5 +20,5 @@ public interface CompraRepositorio extends JpaRepository<Compra, Long> {
 	 * @param propietario El usuario propietario de las compras.
 	 * @return Lista de compras pertenecientes al propietario especificado.
 	 */
-	List<Compra> findByPropietario(Usuario propietario);
+	List<Compra> findByPropietarioDeLaCompra(Usuario propietario);
 }
