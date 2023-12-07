@@ -59,8 +59,8 @@ public class CompraControlador {
 		if (productosCarrito != null) {
 			
 			Double total = 0.0;
-			for (int i = 0; i < productosCarrito.size(); i++) {
-				total += productosCarrito.get(i).getPrecio();				
+			for (Producto p : productosCarrito) {
+				total += p.getPrecio();				
 			}
 			return total;
 		}		
@@ -68,12 +68,7 @@ public class CompraControlador {
 		return 0.0;
 	}
 	
-	@ModelAttribute("mis_compras")
-	public List<Compra> misCompras() {
-		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		usuario = usuarioServicio.buscarPorEmail(email);
-		return compraServicio.porEmailPropietario(email);
-	}
+
 	
 	@GetMapping("/carrito")
 	public String verCarrito(Model model) {
@@ -105,14 +100,49 @@ public class CompraControlador {
 		
 	}
 	
-	@GetMapping("misproductos")
-	public String verMisProductos(Model model) {
-		List<Producto> mis_productos = productoServicio.productosDeUnPropietario(usuario);
-		model.addAttribute("misproductos", mis_productos);
-		return "app/producto/lista";
+
+	@GetMapping("/carrito/finalizar")
+	public String checkout() {
+		List<Long> contenidoCarrito = (List<Long>) session.getAttribute("carrito");
+		if (contenidoCarrito == null)
+			return "redirect:/public";
+		
+		List<Producto> productos = productosCarrito();
+		
+		Compra c = compraServicio.insertar(new Compra(), usuario);
+		
+		productos.forEach(p -> compraServicio.addProductoCompra(p, c));
+		session.removeAttribute("carrito");
+		
+		return "redirect:/app/compra/factura/"+c.getId();
+		
 	}
 	
+	@GetMapping("/compra/factura/{id}")
+	public String factura(Model model, @PathVariable Long id) {
+		Compra c = compraServicio.buscarPorId(id);
+		List<Producto> productosCompra = productoServicio.productosDeUnaCompra(c);
+		model.addAttribute("productos", productosCompra);
+		model.addAttribute("compra", c);
+		Double total = 0.0;
+		for (Producto p : productosCompra) {
+			total += p.getPrecio();				
+		}
+		model.addAttribute("total_compra", total);
+		return "/app/compra/factura";
+	}
 	
+	@ModelAttribute("mis_compras")
+	public List<Compra> misCompras() {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		usuario = usuarioServicio.buscarPorEmail(email);
+		return compraServicio.porEmailPropietario(email);
+	}
+	
+	@GetMapping("/miscompras")
+	public String verMisCompras(Model model) {
+		return "/app/compra/listado";
+	}
 	
 	
 }
